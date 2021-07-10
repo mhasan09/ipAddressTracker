@@ -83,15 +83,18 @@ export default {
     });
     const getIpInfo = async() => {
       try{
-        const data = await axios.get(`https://geo.ipify.org/api/v1?apiKey=at_W1lP0vpUVk9L4OcQFDGZILQWbwVfP&ipAddress=${queryIp.value}`);
+        // `https://geo.ipify.org/api/v1?apiKey=at_W1lP0vpUVk9L4OcQFDGZILQWbwVfP&ipAddress=${queryIp.value}`
+        // http://api.ipstack.com/103.158.210.10?access_key=922246af91ba267b04d87f568ee1ca0f
+        const data = await axios.get(`http://api.ipstack.com/${queryIp.value}?access_key=922246af91ba267b04d87f568ee1ca0f`);
+        console.log(data.data)
         const result = data.data
         IpInfo.value = {
           address: result.ip,
-          state: result.location.region,
-          timezone: result.location.timezone,
-          isp: result.isp,
-          lat: result.location.lat,
-          lng: result.location.lng,
+          country: result.country_name,
+          region: result.region_name,
+          // isp: result.isp,
+          lat: result.latitude,
+          lng: result.longitude,
         };
         leaflet.marker([IpInfo.value.lat, IpInfo.value.lng]).addTo(mymap);
         mymap.setView([IpInfo.value.lat, IpInfo.value.lng], 13);
