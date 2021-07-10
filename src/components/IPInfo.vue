@@ -12,10 +12,10 @@
       <h3 class="text-xs mb-2 uppercase">Region</h3>
       <span class="text-2xl">{{ IpInfo.region }}</span>
     </div>
-    <!-- <div class="flex flex-col">
+    <div class="flex flex-col">
       <h3 class="text-xs mb-2 uppercase">ISP</h3>
       <span class="text-2xl">{{ IpInfo.isp }}</span>
-    </div> -->
+    </div>
   </div>
 </template>
 

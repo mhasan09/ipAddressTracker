@@ -85,14 +85,15 @@ export default {
       try{
         // `https://geo.ipify.org/api/v1?apiKey=at_W1lP0vpUVk9L4OcQFDGZILQWbwVfP&ipAddress=${queryIp.value}`
         // http://api.ipstack.com/103.158.210.10?access_key=922246af91ba267b04d87f568ee1ca0f
-        const data = await axios.get(`http://api.ipstack.com/${queryIp.value}?access_key=922246af91ba267b04d87f568ee1ca0f`);
+        //https://ipapi.co/${queryIp.value}/json/
+        const data = await axios.get(`https://ipapi.co/${queryIp.value}/json/`);
         console.log(data.data)
         const result = data.data
         IpInfo.value = {
           address: result.ip,
           country: result.country_name,
-          region: result.region_name,
-          // isp: result.isp,
+          region: result.city,
+          isp: result.org,
           lat: result.latitude,
           lng: result.longitude,
         };
