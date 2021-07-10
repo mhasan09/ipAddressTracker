@@ -17,6 +17,7 @@
         <h1 class="text-white text-center text-3xl pb-4">IP Address Tracker</h1>
         <div class="flex">
           <input
+            v-model="queryIp"
             class="
               flex-1
               py-3
@@ -27,7 +28,7 @@
             placeholder="Search for any IP Address or leave it empty to get your IP Info"
             type="text"
           />
-          <i
+          <i @click="getIpInfo()"
             class="
               cursor-pointer
               bg-black
@@ -42,7 +43,7 @@
           ></i>
         </div>
       </div>
-      <IPInfo />
+      <IPInfo v-if='IpInfo' v-bind:IpInfo="IpInfo"/>
     </div>
 
     <!-- Map -->
@@ -54,16 +55,19 @@
 // @ is an alias to /src
 import leaflet from "leaflet";
 import IPInfo from "../components/IPInfo";
-import { onMounted } from "vue";
+import { onMounted,ref } from "vue";
+import axios from "axios"
 export default {
   name: "Home",
   components: {
     IPInfo,
   },
   setup() {
+    const queryIp = ref("")
+    const IpInfo = ref(null)
     let mymap;
     onMounted(() => {
-      mymap = L.map("mapid").setView([51.505, -0.09], 13);
+      mymap = L.map("mapid").setView([23.810331, 90.412521], 9);
       L.tileLayer(
         "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWhhc2FuMDkiLCJhIjoiY2txeGhsbW9iMHZubjJucWhqaG5hd2Q2NCJ9.FVvSMcgOkFEfTRXxIuJS3g",
         {
@@ -77,6 +81,26 @@ export default {
         }
       ).addTo(mymap);
     });
+    const getIpInfo = async() => {
+      try{
+        const data = await axios.get(`https://geo.ipify.org/api/v1?apiKey=at_W1lP0vpUVk9L4OcQFDGZILQWbwVfP&ipAddress=${queryIp.value}`);
+        const result = data.data
+        IpInfo.value = {
+          address: result.ip,
+          state: result.location.region,
+          timezone: result.location.timezone,
+          isp: result.isp,
+          lat: result.location.lat,
+          lng: result.location.lng,
+        };
+        leaflet.marker([IpInfo.value.lat, IpInfo.value.lng]).addTo(mymap);
+        mymap.setView([IpInfo.value.lat, IpInfo.value.lng], 13);
+      }
+      catch(err){
+        alert(err.message)
+      }
+    }
+    return {queryIp,IpInfo,getIpInfo}
   },
 };
 </script>
