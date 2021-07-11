@@ -1,4 +1,6 @@
 # ipaddresstracker
+IP Address tracker using Vue3 composition API and Tailwind CSS. For Geolocation API I've used ipapi 
+
 
 ## Project setup
 ```
